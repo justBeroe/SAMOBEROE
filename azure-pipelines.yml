@@ -1,18 +1,40 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
-
-runs-on: self-hosted
-
+ADO Pipeline job:
+- job: SAST
+displayName: SAST scan
+pool:
+vmImage: 'windows-latest'
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: JavaToolInstaller@0
+displayName: Use JRE 11
+inputs:
+versionSpec: 11
+jdkArchitectureOption: x64
+jdkSourceOption: PreInstalled
+
+- task: BatchScript@1
+displayName: Setup Visual Studio environment
+inputs:
+filename: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat
+modifyEnvironment: true
+
+- task: FortifyScanCentralSAST@7
+displayName: Run SAST scan
+inputs:
+scanCentralCtrlUrl: 'https://beroett:8443/scancentral-ctrl/'
+applicationName: "Disappear"
+applicationVersion: "2"
+#applicationIdentifierType: 'byId'
+#applicationVersionId: '10000'
+block: true
+buildFailureCriteria: "[fortify priority order]:medium or [fortify priority order]:high or [fortify priority order]:critical"
+#buildFile: "./BethanysPieShopHRM.App/BethanysPieShopHRM.App.csproj"
+buildTool: none
+outputFile: $(agent.tempdirectory)/output.fpr
+overwrite: true
+quiet: false
+scanCentralClientToken: $(ScanCentralClientToken)
+sscCiToken: $(FortifyCliToken)
+sscUrl: $(FortifyBaseUrl)
+taskResultForBuildFailureCriteria: WARN
+uploadToSSC: true
