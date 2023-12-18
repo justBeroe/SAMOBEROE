@@ -1,0 +1,36 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+  steps:    
+      - name: Setup Fortify tools
+        uses: fortify/github-action/setup@v1
+        with:
+          export-path: true
+          fcli: latest
+          sc-client: 23.1.0
+          fod-uploader: latest
+          vuln-exporter: v2
+          bugtracker-utility: skip
+      - name: Run fcli from PATH
+        run: fcli -V
+      - name: Run fcli using FCLI_CMD environment variable
+        run: ${FCLI_CMD} -V
+
+    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+    # Docs: https://getcomposer.org/doc/articles/scripts.md
+
+    # - name: Run test suite
+    #   run: composer run-script test
