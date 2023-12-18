@@ -10,11 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-  steps:    
+  FCLI:
+    runs-on: self-hosted
+    steps:    
       - name: Setup Fortify tools
         uses: fortify/github-action/setup@v1
         with:
@@ -28,8 +26,6 @@ jobs:
         run: fcli -V
       - name: Run fcli using FCLI_CMD environment variable
         run: ${FCLI_CMD} -V
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     # - name: Run test suite
