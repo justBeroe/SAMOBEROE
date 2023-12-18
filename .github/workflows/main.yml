@@ -9,13 +9,14 @@ on:
     branches: [master]
 
 jobs:                                                  
-  Fortify FCLI:
+  FortifyFCLI:
     # Use the appropriate runner for building your source code
+    
     runs-on: self-hosted
 
-   steps:    
+    steps:    
       - name: Setup Fortify tools
-        uses: fortify/github-action/setup@v1
+      - uses: fortify/github-action/setup@v1
         with:
           export-path: true
           fcli: latest
