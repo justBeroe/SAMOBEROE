@@ -1,31 +1,32 @@
-name: Fortify ScanCentral SAST Scan
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
 on:
-  
+  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    # Master or main branch that you want to trigger this workflow for
-    branches: [master]
+    branches: [ "master" ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [master]
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-jobs:                                                  
-  FortifyFCLI:
-    # Use the appropriate runner for building your source code
-    
-    runs-on: self-hosted
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  FortifySCclientDownload:
+    # The type of runner that the job will run on
+     runs-on: self-hosted
 
-    steps:    
-      - name: Setup Fortify tools
-        uses: fortify/github-action/setup@v1
+    # Steps represent a sequence of tasks that will be executed as part of the job
+     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+        ### Set up Fortify ScanCentral Client ###
+      - name: Download Fortify ScanCentral Client
+        uses: fortify/gha-setup-scancentral-client@v1   
         with:
-          export-path: false
-          fcli: latest
-          sc-client: 23.1.0
-          fod-uploader: skip
-          vuln-exporter: v2
-          bugtracker-utility: skip
-      - name: Run fcli from PATH
-        run: fcli -V
-      - name: Run fcli using FCLI_CMD environment variable
-        run: ${FCLI_CMD} -V
+          version: 23.2.0   
