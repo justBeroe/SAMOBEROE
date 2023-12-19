@@ -21,7 +21,7 @@ jobs:
           export-path: true
           fcli: latest
           sc-client: 23.1.0
-          fod-uploader: latest
+          fod-uploader: skip
           vuln-exporter: v2
           bugtracker-utility: skip
       - name: Run fcli from PATH
