@@ -17,7 +17,7 @@ jobs:
 
     steps:    
       - name: Setup Fortify tools
-      - uses: fortify/github-action/setup@v1
+        uses: fortify/github-action/setup@v1
         with:
           export-path: true
           fcli: latest
